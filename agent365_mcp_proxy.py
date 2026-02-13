@@ -37,6 +37,7 @@ import sys
 import json
 import logging
 import time
+import os
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import requests
@@ -58,9 +59,6 @@ TOKEN_PATHS = [
 REQUEST_TIMEOUT = 90  # 90 seconds (Agent 365 search can take 60-90s)
 MAX_RETRIES = 1  # Retry network errors once
 RETRY_BACKOFF = 5  # 5 second backoff between retries
-
-# Fix import for Windows path
-import os
 
 
 class Agent365MCPProxy:

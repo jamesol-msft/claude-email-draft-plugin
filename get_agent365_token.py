@@ -27,11 +27,14 @@ def create_mock_token(token_path: Path):
     print("Creating mock token for testing...")
     print()
 
+    # Agent 365 CLI token format
     token_data = {
-        "access_token": "mock_token_for_testing",
-        "token_type": "Bearer",
-        "expires_in": 3600,
-        "expires_at": 9999999999
+        "Tokens": {
+            "mock-tenant-id": {
+                "AccessToken": "mock_token_for_testing",
+                "ExpiresOn": "9999999999"
+            }
+        }
     }
 
     # Create directory if it doesn't exist
