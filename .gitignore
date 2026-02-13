@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Agent 365
+auth-token.json
+.agent365/
+*.token
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code
+.claude/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+*.log
+
+# Secrets
+*.env
+.env.local
+credentials.json

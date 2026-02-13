@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "agent365-proxy": {
+      "command": "python",
+      "args": [
+        "C:/Users/<username>/agent365_mcp_proxy.py"
+      ],
+      "env": {
+        "AGENT365_TOKEN_PATH": "C:/Users/<username>/.agent365/auth-token.json"
+      }
+    }
+  }
+}
