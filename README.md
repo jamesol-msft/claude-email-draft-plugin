@@ -32,61 +32,51 @@ Unknown recipients use a professional default style.
 - Agent 365 account with email access
 - Microsoft 365 mailbox
 
-### Installation
+### Installation (2 commands!)
 
-1. **Clone this repository**
+1. **Clone and install**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/claude-email-draft-plugin.git
+   git clone https://github.com/jamesol-msft/claude-email-draft-plugin.git
    cd claude-email-draft-plugin
+   pip install -r requirements.txt
+   python setup.py
    ```
 
-2. **Get Agent 365 token**
-   ```bash
-   # Use the Agent 365 CLI to authenticate
-   # Token will be saved to ~/.agent365/auth-token.json
-   ```
+2. **Restart Claude Desktop/CLI**
 
-3. **Copy files to home directory**
+That's it! The setup script automatically:
+- ✅ Installs MCP proxy to your home directory
+- ✅ Installs skill to `~/.claude/skills/email-draft/`
+- ✅ Configures Claude Desktop MCP server
+- ✅ Provides token setup instructions
 
-   **Windows:**
-   ```bash
-   copy agent365_mcp_proxy.py %USERPROFILE%\agent365_mcp_proxy.py
-   mkdir %USERPROFILE%\.claude\skills\email-draft
-   copy skills\email-draft\SKILL.md %USERPROFILE%\.claude\skills\email-draft\
-   ```
+### Token Setup (Optional - for real email access)
 
-   **Mac/Linux:**
-   ```bash
-   cp agent365_mcp_proxy.py ~/agent365_mcp_proxy.py
-   mkdir -p ~/.claude/skills/email-draft
-   cp skills/email-draft/SKILL.md ~/.claude/skills/email-draft/
-   ```
+For testing without a real token, the plugin works in mock mode by default. For real email access:
 
-4. **Configure Claude Code**
+```bash
+# If you have get_agent365_token.py
+python get_agent365_token.py
 
-   Edit your Claude Desktop config file:
-   - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
-   - **Mac:** `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Linux:** `~/.config/Claude/claude_desktop_config.json`
+# Or create a mock token for testing
+mkdir -p ~/.agent365
+cat > ~/.agent365/auth-token.json << 'EOF'
+{
+  "access_token": "mock_token_for_testing",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "expires_at": 9999999999
+}
+EOF
+```
 
-   Add the MCP server:
-   ```json
-   {
-     "mcpServers": {
-       "agent365-proxy": {
-         "command": "python",
-         "args": ["C:/Users/<username>/agent365_mcp_proxy.py"],
-         "env": {
-           "AGENT365_TOKEN_PATH": "C:/Users/<username>/.agent365/auth-token.json"
-         }
-       }
-     }
-   }
-   ```
+### Verify Setup
 
-   **Replace `<username>` with your actual username!**
+```bash
+python verify_setup.py
+```
 
-5. **Restart Claude Code**
+This checks that everything is configured correctly.
 
 ## 📖 Usage
 

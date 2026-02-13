@@ -1,0 +1,7 @@
+# Agent 365 Email Draft Plugin - Python Dependencies
+
+# MCP SDK - Model Context Protocol for Claude Desktop integration
+mcp>=1.26.0
+
+# HTTP client for Agent 365 API calls
+requests>=2.32.0
