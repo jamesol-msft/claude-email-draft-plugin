@@ -25,7 +25,7 @@ def get_claude_config_path():
     if system == "Windows":
         appdata = os.environ.get("APPDATA")
         if not appdata:
-            print("❌ APPDATA environment variable not found")
+            print("[ERROR] APPDATA environment variable not found")
             sys.exit(1)
         return Path(appdata) / "Claude" / "claude_desktop_config.json"
     elif system == "Darwin":  # macOS
@@ -35,11 +35,11 @@ def get_claude_config_path():
 
 
 def main():
-    print("╔══════════════════════════════════════════════════════════════╗")
-    print("║                                                              ║")
-    print("║  🚀 Agent 365 Email Draft Plugin Setup                       ║")
-    print("║                                                              ║")
-    print("╚══════════════════════════════════════════════════════════════╝")
+    print("=" * 64)
+    print()
+    print("  Agent 365 Email Draft Plugin Setup")
+    print()
+    print("=" * 64)
     print()
 
     # Check if running with --mock flag
@@ -50,20 +50,20 @@ def main():
     proxy_src = Path(__file__).parent / "agent365_mcp_proxy.py"
 
     if not proxy_src.exists():
-        print(f"❌ Error: agent365_mcp_proxy.py not found at {proxy_src}")
+        print(f"[ERROR] Error: agent365_mcp_proxy.py not found at {proxy_src}")
         sys.exit(1)
 
     proxy_dst = home / "agent365_mcp_proxy.py"
 
-    print(f"📦 Step 1/3: Installing MCP Proxy")
+    print(f"[INSTALL] Step 1/3: Installing MCP Proxy")
     print(f"   Source: {proxy_src}")
     print(f"   Target: {proxy_dst}")
 
     try:
         shutil.copy(proxy_src, proxy_dst)
-        print("   ✅ MCP proxy installed")
+        print("   [OK] MCP proxy installed")
     except Exception as e:
-        print(f"   ❌ Failed to copy proxy: {e}")
+        print(f"   [ERROR] Failed to copy proxy: {e}")
         sys.exit(1)
 
     print()
@@ -72,28 +72,28 @@ def main():
     skill_src = Path(__file__).parent / "skills" / "email-draft" / "SKILL.md"
 
     if not skill_src.exists():
-        print(f"❌ Error: SKILL.md not found at {skill_src}")
+        print(f"[ERROR] Error: SKILL.md not found at {skill_src}")
         sys.exit(1)
 
     skill_dst = home / ".claude" / "skills" / "email-draft" / "SKILL.md"
 
-    print(f"📦 Step 2/3: Installing Skill")
+    print(f"[INSTALL] Step 2/3: Installing Skill")
     print(f"   Source: {skill_src}")
     print(f"   Target: {skill_dst}")
 
     try:
         skill_dst.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(skill_src, skill_dst)
-        print("   ✅ Skill installed")
+        print("   [OK] Skill installed")
     except Exception as e:
-        print(f"   ❌ Failed to copy skill: {e}")
+        print(f"   [ERROR] Failed to copy skill: {e}")
         sys.exit(1)
 
     print()
 
     # 3. Configure Claude Desktop
     config_path = get_claude_config_path()
-    print(f"⚙️  Step 3/3: Configuring Claude Desktop")
+    print(f"[CONFIG]  Step 3/3: Configuring Claude Desktop")
     print(f"   Config: {config_path}")
 
     # Load existing config or create new
@@ -102,12 +102,12 @@ def main():
         try:
             with open(config_path) as f:
                 config = json.load(f)
-            print("   📄 Existing config found, will merge")
+            print("   [FILE] Existing config found, will merge")
         except json.JSONDecodeError:
-            print("   ⚠️  Existing config is invalid, creating new")
+            print("   [WARN]  Existing config is invalid, creating new")
             config = {}
     else:
-        print("   📄 Creating new config")
+        print("   [FILE] Creating new config")
         config_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Add MCP server
@@ -129,7 +129,7 @@ def main():
     # Add mock mode if requested
     if mock_mode:
         mcp_config["env"]["AGENT365_MOCK_MODE"] = "true"
-        print("   🧪 Mock mode enabled")
+        print("   [MOCK] Mock mode enabled")
 
     config["mcpServers"]["agent365-proxy"] = mcp_config
 
@@ -137,24 +137,24 @@ def main():
     try:
         with open(config_path, 'w') as f:
             json.dump(config, f, indent=2)
-        print("   ✅ Claude Desktop configured")
+        print("   [OK] Claude Desktop configured")
     except Exception as e:
-        print(f"   ❌ Failed to write config: {e}")
+        print(f"   [ERROR] Failed to write config: {e}")
         sys.exit(1)
 
     print()
 
     # 4. Token setup instructions
-    print("╔══════════════════════════════════════════════════════════════╗")
-    print("║  ✅ Installation Complete!                                    ║")
-    print("╚══════════════════════════════════════════════════════════════╝")
+    print("=" * 64)
+    print("  Installation Complete!")
+    print("=" * 64)
     print()
 
     if mock_mode:
-        print("🧪 MOCK MODE: No token needed, plugin will use fake data")
+        print("[MOCK MODE] No token needed, plugin will use fake data")
         print()
     else:
-        print("⚠️  IMPORTANT: Token Setup Required")
+        print("[!] IMPORTANT: Token Setup Required")
         print("=" * 64)
         print("The MCP server is configured, but you need an Agent 365 token.")
         print()
@@ -176,12 +176,12 @@ def main():
         print("=" * 64)
         print()
 
-    print("📋 Next steps:")
+    print("[NEXT] Next steps:")
     print("  1. Generate Agent 365 token (see above) OR use mock mode")
     print("  2. Restart Claude Desktop/CLI to load the MCP server")
     print("  3. Test with: /email-draft show me unread messages")
     print()
-    print("💡 Run 'python verify_setup.py' to check if everything is configured correctly")
+    print("[TIP] Run 'python verify_setup.py' to check if everything is configured correctly")
     print()
 
 if __name__ == "__main__":
